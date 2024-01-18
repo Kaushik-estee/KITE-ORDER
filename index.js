@@ -13,6 +13,11 @@ const wss = new WebSocket.Server({ server });
 // Enable CORS for all routes
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cors({
+    origin: ['https://kite-new.netlify.app', 'http://localhost:5502', 'http://localhost:5500' , 'http://localhost:5501'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,  // Enable credentials (if needed)
+}));
 
 const tickerMap = {};
 
