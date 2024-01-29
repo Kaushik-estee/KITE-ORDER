@@ -3,7 +3,7 @@
 const KiteConnect = require('kiteconnect').KiteConnect;
 
 const apiKey = 'y0umvn72a2yiqlyy';
-const accessToken = 'BjtO4RE3pBQiCT3YJA3Iog7MKVg8SRvo';
+const accessToken = 'o7w1WLahsivkdafrBfHIxUYmggAD9aga';
 
 const kite = new KiteConnect({
   api_key: apiKey,
