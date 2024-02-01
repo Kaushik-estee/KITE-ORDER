@@ -13,12 +13,14 @@ const wss = new WebSocket.Server({ server });
 
 // Enable CORS for all routes
 app.use(cors());
-app.use(bodyParser.json());
+
 app.use(cors({
     origin: ['https://kite-new.netlify.app', 'http://localhost:5502', 'http://localhost:5500' , 'http://localhost:5501'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,  // Enable credentials (if needed)
 }));
+
+app.use(bodyParser.json());
 
 const tickerMap = {};
 
@@ -28,9 +30,10 @@ const ticker = new KiteTicker({
   
 });
 const kite = new KiteConnect({
-  api_key: 'y0umvn72a2yiqlyy',
-  access_token: 'z0KqoIcZAWkO9GD4JjMhtuRdmhOhB7pr',
-});
+    api_key: 'y0umvn72a2yiqlyy',
+    access_token: 'z0KqoIcZAWkO9GD4JjMhtuRdmhOhB7pr',
+  });
+  
 
 wss.on('connection', (ws) => {
   console.log('WebSocket connection opened');
@@ -93,20 +96,21 @@ wss.on('connection', (ws) => {
 });
 
 app.post('/place-trade', async (req, res) => {
-  const orderParams = req.body;
-
-  if (!orderParams) {
-    return res.status(400).json({ error: 'Order parameters are required in the request body' });
-  }
-
-  try {
-    await placeLimitOrder(orderParams);
-    res.status(200).json({ message: 'Trade placed successfully' });
-  } catch (error) {
-    console.error('Error placing trade:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+    const orderParams = req.body;
+  
+    if (!orderParams) {
+      return res.status(400).json({ error: 'Order parameters are required in the request body' });
+    }
+  
+    try {
+      const orderId = await placeLimitOrder(orderParams); // Assuming placeLimitOrder returns the order ID
+      res.status(200).json({ message: 'Trade placed successfully', order_id: orderId });
+    } catch (error) {
+      console.error('Error placing trade:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
 
 app.post('/unsubscribe', (req, res) => {
   const instrumentToken = req.body.instrument_token;
@@ -126,23 +130,24 @@ app.post('/unsubscribe', (req, res) => {
 
   return res.json({ success: true, instrument_token: instrumentToken });
 });
-/////////////////////////////////////
+//////////////////////////exit////////////////////
 app.post('/cancel-order', async (req, res) => {
-  const { order_id } = req.body;
-
-  if (!order_id) {
-    return res.status(400).json({ error: 'Order ID is required in the request body' });
-  }
-
-  try {
-    const response = await kite.cancelOrder("regular", order_id);
-    console.log("Order canceled successfully:", response);
-    res.status(200).json({ message: 'Order canceled successfully', response });
-  } catch (error) {
-    console.error("Error canceling order:", error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+    const { order_id } = req.body;
+  
+    if (!order_id) {
+      return res.status(400).json({ error: 'Order ID is required in the request body' });
+    }
+  
+    try {
+      const response = await kite.cancelOrder("regular", order_id);
+      console.log("Order canceled successfully:", response);
+      res.status(200).json({ message: 'Order canceled successfully', response });
+    } catch (error) {
+      console.error("Error canceling order:", error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+/////////////////////////////////////////////
 
 const port = process.env.PORT || 4000;
 
