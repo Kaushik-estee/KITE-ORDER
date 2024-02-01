@@ -1,4 +1,5 @@
 const { KiteTicker } = require('kiteconnect');
+const { KiteConnect } = require('kiteconnect');
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
@@ -23,8 +24,12 @@ const tickerMap = {};
 
 const ticker = new KiteTicker({
   api_key: 'y0umvn72a2yiqlyy',
-  access_token: 'o7w1WLahsivkdafrBfHIxUYmggAD9aga',
+  access_token: 'z0KqoIcZAWkO9GD4JjMhtuRdmhOhB7pr',
   
+});
+const kite = new KiteConnect({
+  api_key: 'y0umvn72a2yiqlyy',
+  access_token: 'z0KqoIcZAWkO9GD4JjMhtuRdmhOhB7pr',
 });
 
 wss.on('connection', (ws) => {
@@ -43,7 +48,7 @@ wss.on('connection', (ws) => {
     if (!tickerMap[instrumentToken]) {
       const instrumentTicker = new KiteTicker({
         api_key: 'y0umvn72a2yiqlyy',
-        access_token: 'o7w1WLahsivkdafrBfHIxUYmggAD9aga',
+        access_token: 'z0KqoIcZAWkO9GD4JjMhtuRdmhOhB7pr',
       });
 
       // Listen for ticks
@@ -120,6 +125,23 @@ app.post('/unsubscribe', (req, res) => {
   delete tickerMap[instrumentToken];
 
   return res.json({ success: true, instrument_token: instrumentToken });
+});
+/////////////////////////////////////
+app.post('/cancel-order', async (req, res) => {
+  const { order_id } = req.body;
+
+  if (!order_id) {
+    return res.status(400).json({ error: 'Order ID is required in the request body' });
+  }
+
+  try {
+    const response = await kite.cancelOrder("regular", order_id);
+    console.log("Order canceled successfully:", response);
+    res.status(200).json({ message: 'Order canceled successfully', response });
+  } catch (error) {
+    console.error("Error canceling order:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 const port = process.env.PORT || 4000;
