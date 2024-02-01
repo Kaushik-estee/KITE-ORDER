@@ -54,7 +54,7 @@ wss.on('connection', (ws) => {
       // Listen for ticks
       instrumentTicker.on('ticks', (ticks) => {
         const ltp = ticks[0]?.last_price;
-        console.log('Ticks received for', instrumentToken, ':', ltp);
+        // console.log('Ticks received for', instrumentToken, ':', ltp);
 
         // Broadcast the live update to all connected clients
         wss.clients.forEach((client) => {
