@@ -26,12 +26,12 @@ const tickerMap = {};
 
 const ticker = new KiteTicker({
   api_key: 'y0umvn72a2yiqlyy',
-  access_token: 'lXAexVcH9dKYVtOJ2m2qGvEzomglQebo',
+  access_token: 'wEdhYfTaBu4seMISopVKto8QoDojtllt',
   
 });
 const kite = new KiteConnect({
     api_key: 'y0umvn72a2yiqlyy',
-    access_token: 'lXAexVcH9dKYVtOJ2m2qGvEzomglQebo',
+    access_token: 'wEdhYfTaBu4seMISopVKto8QoDojtllt',
   });
   
 
@@ -51,7 +51,7 @@ wss.on('connection', (ws) => {
     if (!tickerMap[instrumentToken]) {
       const instrumentTicker = new KiteTicker({
         api_key: 'y0umvn72a2yiqlyy',
-        access_token: 'lXAexVcH9dKYVtOJ2m2qGvEzomglQebo',
+        access_token: 'wEdhYfTaBu4seMISopVKto8QoDojtllt',
       });
 
       // Listen for ticks
