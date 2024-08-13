@@ -94,6 +94,20 @@ wss.on('connection', (ws) => {
     console.log('WebSocket connection closed');
   });
 });
+//////////////////////////////////////////////////
+// Keep WebSocket connection alive with ping mechanism
+setInterval(() => {
+  wss.clients.forEach((ws) => {
+      if (ws.isAlive === false) return ws.terminate();
+      ws.isAlive = false;
+      ws.ping(() => {});
+  });
+}, 30000);
+
+
+
+
+//////////////////////////////////
 
 app.post('/place-trade', async (req, res) => {
     const orderParams = req.body;
