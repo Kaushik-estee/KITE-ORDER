@@ -96,13 +96,7 @@ wss.on('connection', (ws) => {
 });
 //////////////////////////////////////////////////
 // Keep WebSocket connection alive with ping mechanism
-setInterval(() => {
-  wss.clients.forEach((ws) => {
-      if (ws.isAlive === false) return ws.terminate();
-      ws.isAlive = false;
-      ws.ping(() => {});
-  });
-}, 30000);
+
 
 
 
